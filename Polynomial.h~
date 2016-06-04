@@ -1,0 +1,78 @@
+#include<iostream>
+#include<cmath>
+#include<simplecpp>
+using namespace std;
+
+class Polynomial{
+
+    int n;//degree
+    double* c;//coefficients
+
+    public:
+        Polynomial();
+
+        Polynomial(const Polynomial &p);
+
+	Polynomial(int d);	
+
+        void read();
+
+        void print();
+
+        Polynomial operator+(const Polynomial &p);
+
+        Polynomial operator-(const Polynomial &p);
+
+        Polynomial operator*(const Polynomial &p);
+
+        Polynomial operator/(const Polynomial &p);
+	
+	Polynomial operator%(const Polynomial &p);
+
+	
+        void plot(double xleft,double xright);
+
+        double valueAt(double k);
+
+        void root();
+
+        Polynomial derivative();
+
+        Polynomial integral();
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,169 @@
+#include<iostream>
+
+#include"Polynomial.h"
+using namespace std;
+
+Polynomial::Polynomial(){
+	c = NULL;
+}
+
+Polynomial::Polynomial(int d){
+	n = d;
+	c = new double[n+1];
+}
+	
+Polynomial::Polynomial(const Polynomial &p){
+	n = p.n;
+	c = new double[n+1];
+	for(int i=0;i<=n;i++) c[i]=0;
+	for(int i=0;i<n+1;i++)c[i]=p.c[i];
+}
+void Polynomial :: print(){
+	if(n==0 && c[0]==0){cout<<0<<endl;return;}
+	int start=0;
+	for(;c[start]==0;start++){}
+		
+
+	if(start ==0) cout<< c[0];
+	    	
+	else if (start>=1){
+		cout<<c[start]; 
+		cout<<"x"<<"^"<<start;}
+		for (int i = start+1;i<=n;i++){
+			if(c[i]!=0){
+				if(c[i]>0)cout<<" + ";
+				if(c[i]<0)cout<<" - ";
+				cout<<abs(c[i]);
+				cout<<"x"<<"^"<<i;
+			}
+		}
+	cout<<endl;
+}
+Polynomial Polynomial::operator+(const Polynomial& p){
+  	Polynomial q(max(p.n,n));
+	for(int i=0;i<=q.n;i++)q.c[i]=0;
+  	if(n>=p.n){
+		for(int i = 0;i<=q.n;i++) {
+			if(i>p.n) q.c[i] = c[i];
+			else q.c[i]= p.c[i]+c[i];
+		}
+	}
+	if(p.n>n){
+		for(int i = 0;i<=q.n;i++) {
+			if(i>n) q.c[i] = p.c[i];
+			else q.c[i]= p.c[i]+c[i];
+		}
+	}
+	return q;
+}
+
+Polynomial Polynomial::derivative(){
+	if (n==0){
+		Polynomial q;
+		q.n = 0;
+		q.c = new double[1];
+		q.c[0] = 0;
+		return q; 
+	} 
+	Polynomial q;
+	q.n=n-1;
+	q.c = new double[n];
+	for(int i=1;i<=n;i++){
+	  if(c[i]!=0)q.c[i-1]=i*c[i];
+	}
+	return q;
+}
+
+Polynomial Polynomial::operator/(const Polynomial &p){
+	if(n<p.n) {Polynomial q;
+	q.n = 0;
+	q.c = new double[1];
+	q.c[0]=0;
+	return q;	
+	}
+	Polynomial r;
+	r.n=n;
+	r.c = new double[n+1];
+	for(int a=0;a<=n;a++)r.c[a]=c[a];
+	Polynomial q;
+	q.n = n - p.n;
+	q.c = new double[q.n+1];
+	int t = n;
+	for(int i=n;i>=p.n;i--){
+		double temp[t+1];
+		for (int j = 0;j<=t;j++){
+			if(j<(t-p.n))temp[j]=0;
+			else temp[j] = p.c[j+p.n-t]*r.c[t]/p.c[p.n];
+		}
+		
+		q.c[i-p.n] = r.c[t]/p.c[p.n];
+		
+		for (int k = 0 ;k<=t;k++){
+			r.c[k] = r.c[k]-temp[k];
+			}	
+		t--;
+	}	
+	return q;
+}
+Polynomial Polynomial::operator%(const Polynomial &p){
+	if(n<p.n) return *this;
+	Polynomial r;
+	r.n=n;
+	r.c = new double[n+1];
+	for(int a=0;a<=n;a++)r.c[a]=c[a];
+	Polynomial q;
+	q.n = n - p.n;
+	q.c = new double[q.n+1];
+	int t = n;
+	for(int i=n;i>=p.n;i--){
+		double temp[t+1];
+		for (int j = 0;j<=t;j++){
+			if(j<(t-p.n))temp[j]=0;
+			else temp[j] = p.c[j+p.n-t]*r.c[t]/p.c[p.n];
+		}
+		q.c[i-p.n] = r.c[t]/p.c[p.n];
+		for (int k = 0 ;k<=t;k++){
+			r.c[k] = r.c[k]-temp[k];
+			}
+		t--;
+	}	
+	r.n = t;
+	return r;
+}		
+// void Polynomial::plot(double xleft,double xright){
+	
+// 	initCanvas("Graph",800,800);
+	
+// 	Line l1(0,400,800,400);
+// 	Line l2(400,0,400,800);
+// 	l1.imprint();
+// 	l2.imprint();
+// 	Line l3(400+10*xleft,0,400+10*xleft,800);
+// 	Line l4(400+10*xright,0,400+10*xright,800);
+// 	l3.setColor(COLOR("red"));
+// 	l4.setColor(COLOR("red"));
+// 	l3.imprint();
+// 	l4.imprint();
+// 	for(int i = 1;i<=20;i++){
+// 	Text t1(400 + i*20,410,2*i);
+// 	Text t2(400 - i*20,410,-2*i);
+// 	t1.imprint();
+// 	t2.imprint();		
+// 	}
+// 	for(int i = 1;i<=20;i++){
+// 	Text t1(390,400+i*20,-i*2);
+// 	Text t2(390,400-i*20,i*2);
+// 	t1.imprint();
+// 	t2.imprint();		
+// 	}
+// 	Text t(405,410,0);
+// 	t.imprint();
+// 	Circle c1(400,400,1);
+// 	c1.moveTo(400+10*xleft,400 - 10*valueAt(xleft));
+// 	c1.penDown();
+// 	for(double x=xleft;x<=xright;x=x+0.1){
+// 		c1.moveTo(400+10*x,400 - 10*valueAt(x));
+		
+// 	}
+// 	return;
+// }
